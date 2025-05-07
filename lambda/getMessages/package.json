@@ -1,0 +1,10 @@
+{
+  "name": "get-messages",
+  "version": "1.0.0",
+  "description": "Lambda para consultar mensagens pendentes",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.x",
+    "@aws-sdk/lib-dynamodb": "^3.x"
+  }
+}

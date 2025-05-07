@@ -1,0 +1,10 @@
+{
+  "name": "ack-messages",
+  "version": "1.0.0",
+  "description": "Lambda para confirmar processamento de mensagens",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.x",
+    "@aws-sdk/lib-dynamodb": "^3.x"
+  }
+}

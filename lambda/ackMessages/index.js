@@ -1,5 +1,8 @@
-const AWS = require('aws-sdk');
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+
+const client = new DynamoDBClient();
+const dynamoDB = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
   try {
@@ -54,7 +57,7 @@ exports.handler = async (event) => {
         ReturnValues: 'UPDATED_NEW'
       };
       
-      return dynamoDB.update(params).promise();
+      return dynamoDB.send(new UpdateCommand(params));
     });
     
     // Aguardar todas as atualizações

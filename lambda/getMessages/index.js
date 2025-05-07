@@ -1,5 +1,8 @@
-const AWS = require('aws-sdk');
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, QueryCommand } = require('@aws-sdk/lib-dynamodb');
+
+const client = new DynamoDBClient();
+const dynamoDB = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
   try {
@@ -24,7 +27,7 @@ exports.handler = async (event) => {
       ExclusiveStartKey: lastEvaluatedKey
     };
     
-    const result = await dynamoDB.query(params).promise();
+    const result = await dynamoDB.send(new QueryCommand(params));
     
     // Preparar token de paginação se houver mais resultados
     let nextToken = undefined;
