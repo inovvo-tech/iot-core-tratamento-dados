@@ -1,0 +1,17 @@
+{
+  "name": "iot-core-example",
+  "version": "1.0.0",
+  "description": "Projeto de demonstração para processamento de mensagens MQTT com persistência em DynamoDB",
+  "scripts": {
+    "cdk": "cd cdk && npm run cdk",
+    "deploy": "cd cdk && npm run cdk deploy",
+    "test-publish": "node scripts/publish-test.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1386.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "MIT"
+}

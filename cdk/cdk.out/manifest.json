@@ -1,0 +1,214 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "IotCoreExampleStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "IotCoreExampleStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "IotCoreExampleStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "IotCoreExampleStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/74cedb1d37bda22403a68634082b4765febf0aff18a4e32aea75fbd08da4610c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "IotCoreExampleStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "IotCoreExampleStack.assets"
+      ],
+      "metadata": {
+        "/IotCoreExampleStack/MessagesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesTable05B58A27"
+          }
+        ],
+        "/IotCoreExampleStack/IotRuleRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotRuleRoleEE933CB9"
+          }
+        ],
+        "/IotCoreExampleStack/IotRuleRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IotRuleRoleDefaultPolicyCCF000B9"
+          }
+        ],
+        "/IotCoreExampleStack/ProcessMqttMessages": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessMqttMessages"
+          }
+        ],
+        "/IotCoreExampleStack/GetMessagesFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetMessagesFunctionServiceRoleA1070383"
+          }
+        ],
+        "/IotCoreExampleStack/GetMessagesFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetMessagesFunctionServiceRoleDefaultPolicy14208670"
+          }
+        ],
+        "/IotCoreExampleStack/GetMessagesFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetMessagesFunctionF32AD2AD"
+          }
+        ],
+        "/IotCoreExampleStack/AckMessagesFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AckMessagesFunctionServiceRoleDDC11D96"
+          }
+        ],
+        "/IotCoreExampleStack/AckMessagesFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AckMessagesFunctionServiceRoleDefaultPolicy683DB0B8"
+          }
+        ],
+        "/IotCoreExampleStack/AckMessagesFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AckMessagesFunction489C37A2"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApiD42A6416"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApiDeploymentF8E706CD3ee44a7e16062e5e27ebdc9698853074"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApiDeploymentStageprodB79AE44F"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApiEndpoint4EEB6F84"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesFE08DADB"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/GET/ApiPermission.IotCoreExampleStackMessagesApi0CE1F62C.GET..messages": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesGETApiPermissionIotCoreExampleStackMessagesApi0CE1F62CGETmessagesBF9F56FA"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/GET/ApiPermission.Test.IotCoreExampleStackMessagesApi0CE1F62C.GET..messages": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesGETApiPermissionTestIotCoreExampleStackMessagesApi0CE1F62CGETmessages5C1A33FC"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesGETA6054AE5"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/ack/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesack270AEBEB"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/ack/POST/ApiPermission.IotCoreExampleStackMessagesApi0CE1F62C.POST..messages.ack": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesackPOSTApiPermissionIotCoreExampleStackMessagesApi0CE1F62CPOSTmessagesack8EF50B30"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/ack/POST/ApiPermission.Test.IotCoreExampleStackMessagesApi0CE1F62C.POST..messages.ack": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesackPOSTApiPermissionTestIotCoreExampleStackMessagesApi0CE1F62CPOSTmessagesack715E0E80"
+          }
+        ],
+        "/IotCoreExampleStack/MessagesApi/Default/messages/ack/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MessagesApimessagesackPOST72D0B3D1"
+          }
+        ],
+        "/IotCoreExampleStack/TableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TableName"
+          }
+        ],
+        "/IotCoreExampleStack/ApiEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiEndpoint"
+          }
+        ],
+        "/IotCoreExampleStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/IotCoreExampleStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/IotCoreExampleStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/IotCoreExampleStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "IotCoreExampleStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
