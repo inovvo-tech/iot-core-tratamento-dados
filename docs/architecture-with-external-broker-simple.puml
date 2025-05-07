@@ -1,0 +1,60 @@
+@startuml IoT Core Example Architecture with External Broker
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+rectangle "Ambiente Externo" as external {
+  [Broker MQTT Externo\n46.202.148.199] as externalBroker
+  [Dispositivo 1] as device1
+  [Dispositivo 2] as device2
+}
+
+rectangle "AWS Cloud" as aws {
+  [AWS IoT Core] as iotCore
+  [AWS IoT Rule] as iotRule
+  database "DynamoDB" as dynamoDB {
+    [Tabela de Mensagens\n(TTL configurado)] as table
+  }
+  
+  rectangle "Funções Lambda" as lambdas {
+    [getMessages] as getLambda
+    [ackMessages] as ackLambda
+    [externalBrokerBridge] as bridgeLambda
+  }
+  
+  [Amazon API Gateway] as apiGateway
+  [Amazon EventBridge] as eventBridge
+}
+
+rectangle "Aplicações Externas" as apps {
+  [Aplicação Cliente] as app
+}
+
+' Fluxo de dados
+device1 --> externalBroker : "MQTT"
+device2 --> externalBroker : "MQTT"
+externalBroker <--> bridgeLambda : "MQTT\n(Subscrição)"
+eventBridge --> bridgeLambda : "Agenda execução\n(a cada 5 min)"
+bridgeLambda --> iotCore : "Publica mensagens\n(devices/data)"
+iotCore --> iotRule : "Mensagem"
+iotRule --> table : "Adiciona timestamp,\nid, status=pending"
+
+apiGateway --> getLambda : "GET /messages"
+apiGateway --> ackLambda : "POST /messages/ack"
+getLambda --> table : "Consulta\n(status=pending)"
+ackLambda --> table : "Atualiza\n(status=processed)"
+app --> apiGateway : "HTTP"
+
+note bottom of table
+  TTL configurado:
+  - 24h para mensagens processadas
+  - 30 dias para mensagens pendentes
+end note
+
+note bottom of bridgeLambda
+  Conecta ao broker externo
+  Inscreve-se nos tópicos
+  Encaminha mensagens para IoT Core
+end note
+
+@enduml

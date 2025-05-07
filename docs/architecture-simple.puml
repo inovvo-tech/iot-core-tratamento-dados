@@ -1,0 +1,48 @@
+@startuml IoT Core Example Architecture
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+rectangle "Dispositivos IoT" as devices {
+  [Dispositivo 1] as device1
+  [Dispositivo 2] as device2
+}
+
+rectangle "AWS Cloud" as aws {
+  [AWS IoT Core] as iotCore
+  [AWS IoT Rule] as iotRule
+  database "DynamoDB" as dynamoDB {
+    [Tabela de Mensagens\n(TTL configurado)] as table
+  }
+  
+  rectangle "Funções Lambda" as lambdas {
+    [getMessages] as getLambda
+    [ackMessages] as ackLambda
+  }
+  
+  [Amazon API Gateway] as apiGateway
+}
+
+rectangle "Aplicações Externas" as apps {
+  [Aplicação Cliente] as app
+}
+
+' Fluxo de dados
+device1 --> iotCore : "MQTT\n(devices/data)"
+device2 --> iotCore : "MQTT\n(devices/data)"
+iotCore --> iotRule : "Mensagem"
+iotRule --> table : "Adiciona timestamp,\nid, status=pending"
+
+apiGateway --> getLambda : "GET /messages"
+apiGateway --> ackLambda : "POST /messages/ack"
+getLambda --> table : "Consulta\n(status=pending)"
+ackLambda --> table : "Atualiza\n(status=processed)"
+app --> apiGateway : "HTTP"
+
+note bottom of table
+  TTL configurado:
+  - 24h para mensagens processadas
+  - 30 dias para mensagens pendentes
+end note
+
+@enduml

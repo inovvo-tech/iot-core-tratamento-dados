@@ -1,0 +1,66 @@
+@startuml IoT Core Example Architecture with External Broker
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v16.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/InternetOfThings/IoTCore.puml
+!include AWSPuml/Database/DynamoDB.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+!include AWSPuml/General/Client.puml
+!include AWSPuml/General/MobileClient.puml
+!include AWSPuml/ApplicationIntegration/EventBridge.puml
+
+skinparam linetype ortho
+skinparam componentStyle rectangle
+
+rectangle "External Environment" {
+  [External MQTT Broker\n46.202.148.199] as externalBroker
+  MobileClient(device1, "Dispositivo IoT 1", "")
+  MobileClient(device2, "Dispositivo IoT 2", "")
+}
+
+rectangle "AWS Cloud" {
+  IoTCore(iotCore, "AWS IoT Core", "Recebe mensagens MQTT")
+  DynamoDB(dynamoDB, "Amazon DynamoDB", "Persiste mensagens com TTL")
+  
+  rectangle "Lambda Functions" {
+    Lambda(getMessages, "getMessages", "Consulta mensagens pendentes")
+    Lambda(ackMessages, "ackMessages", "Confirma processamento")
+    Lambda(brokerBridge, "externalBrokerBridge", "Bridge para broker externo")
+  }
+  
+  APIGateway(apiGateway, "API Gateway", "Expõe APIs REST")
+  EventBridge(eventBridge, "EventBridge", "Agenda execução da bridge")
+}
+
+rectangle "Aplicações Externas" {
+  Client(app, "Aplicação Cliente", "")
+}
+
+' Fluxo de dados
+device1 -right-> externalBroker : MQTT
+device2 -right-> externalBroker : MQTT
+externalBroker <-down-> brokerBridge : "MQTT\n(Subscrição)"
+eventBridge -right-> brokerBridge : "Agenda execução\n(a cada 5 min)"
+brokerBridge -right-> iotCore : "Publica mensagens\n(devices/data)"
+iotCore -right-> dynamoDB : "Regra IoT\n(adiciona timestamp, id, status)"
+
+apiGateway -down-> getMessages
+apiGateway -down-> ackMessages
+getMessages -right-> dynamoDB : "Consulta\n(status=pending)"
+ackMessages -right-> dynamoDB : "Atualiza\n(status=processed)"
+app -up-> apiGateway : "HTTP\n(GET /messages, POST /messages/ack)"
+
+note bottom of dynamoDB
+  TTL configurado:
+  - 24h para mensagens processadas
+  - 30 dias para mensagens pendentes
+end note
+
+note bottom of brokerBridge
+  Conecta ao broker externo
+  Inscreve-se nos tópicos
+  Encaminha mensagens para IoT Core
+end note
+
+@enduml
