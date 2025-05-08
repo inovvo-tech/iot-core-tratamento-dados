@@ -1,13 +1,13 @@
 @startuml IoT Core Example Architecture
 
-!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v16.0/dist
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/InternetOfThings/IoTCore.puml
 !include AWSPuml/Database/DynamoDB.puml
 !include AWSPuml/Compute/Lambda.puml
-!include AWSPuml/ApplicationIntegration/APIGateway.puml
+!include AWSPuml/NetworkingContentDelivery/APIGateway.puml
 !include AWSPuml/General/Client.puml
-!include AWSPuml/General/MobileClient.puml
+!include AWSPuml/General/Mobileclient.puml
 
 skinparam linetype ortho
 skinparam componentStyle rectangle
@@ -25,8 +25,8 @@ rectangle "AWS Cloud" {
 }
 
 rectangle "Dispositivos" {
-  MobileClient(device1, "Dispositivo IoT 1", "")
-  MobileClient(device2, "Dispositivo IoT 2", "")
+  Mobileclient(device1, "Dispositivo IoT 1", "")
+  Mobileclient(device2, "Dispositivo IoT 2", "")
 }
 
 rectangle "Aplicações Externas" {
