@@ -14,7 +14,6 @@ export class IotCoreExampleStack extends cdk.Stack {
     // DynamoDB table para persistência das mensagens
     const messagesTable = new dynamodb.Table(this, 'MessagesTable', {
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
-      // Removido sortKey para simplificar operações
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       timeToLiveAttribute: 'expirationTime', // TTL configurado
     });
