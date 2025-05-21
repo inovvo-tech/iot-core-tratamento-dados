@@ -12,16 +12,25 @@ const iotData = new AWS.IotData({
   endpoint: process.env.IOT_ENDPOINT // Você precisa definir o endpoint do IoT Core
 });
 
-// Gerar dados de exemplo
+// Gerar dados de exemplo com o formato especificado
 function generateSampleData() {
+  // Gerar um timestamp atual em segundos (formato Unix timestamp)
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  
   return {
-    deviceId: `device-${Math.floor(Math.random() * 10) + 1}`,
-    temperature: (Math.random() * 30 + 10).toFixed(1),
-    humidity: (Math.random() * 60 + 30).toFixed(1),
-    pressure: (Math.random() * 10 + 1000).toFixed(1),
-    battery: Math.floor(Math.random() * 100),
-    messageId: uuidv4(),
-    readingTime: new Date().toISOString()
+    "ts": currentTimestamp,
+    "values": {
+      "MI1": parseFloat((Math.random() * 3 + 1).toFixed(2)),
+      "MI2": parseFloat((Math.random() * 20 + 10).toFixed(1)),
+      "MI3": parseFloat((Math.random() * 15 + 10).toFixed(1)),
+      "MI4": parseFloat((Math.random() * 200 + 800).toFixed(1)),
+      "MI5": parseFloat((Math.random() * 10 + 1).toFixed(1)),
+      "MI6": parseFloat((Math.random() * 20 + 1000).toFixed(1)),
+      "MI7": parseFloat((Math.random() * 10 + 25).toFixed(1)),
+      "MI8": parseFloat((Math.random() * 20 + 70).toFixed(1)),
+      "op": "vivo",
+      "sq": Math.floor(Math.random() * 10) + 1
+    }
   };
 }
 
