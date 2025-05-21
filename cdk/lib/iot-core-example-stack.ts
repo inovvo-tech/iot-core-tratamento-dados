@@ -5,6 +5,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 
 export class IotCoreExampleStack extends cdk.Stack {
@@ -32,12 +33,25 @@ export class IotCoreExampleStack extends cdk.Stack {
 
     // Permissão para escrever no DynamoDB
     messagesTable.grantWriteData(iotRole);
+    
+    // Criar grupo de logs para erros da regra IoT
+    const iotErrorLogGroup = new logs.LogGroup(this, 'IotRuleErrorLogs', {
+      logGroupName: '/aws/iot/rule/process_mqtt_messages_errors',
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    
+    // Adicionar permissão para o IoT Core escrever nos logs
+    iotRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['logs:CreateLogStream', 'logs:PutLogEvents'],
+      resources: [iotErrorLogGroup.logGroupArn],
+    }));
 
     // Regra IoT para processar mensagens e adicionar timestamp
     const topicRule = new iot.CfnTopicRule(this, 'ProcessMqttMessages', {
       ruleName: 'process_mqtt_messages',
       topicRulePayload: {
-        sql: "SELECT *, timestamp() as timestamp, topic() as topic, uuid() as id, timestamp() + 2592000 as expirationTime, 'pending' as status FROM '+/BRUTO'",
+        sql: "SELECT *, timestamp() as timestamp, topic() as topic, traceid() as id, timestamp() + 2592000 as expirationTime, 'pending' as status FROM '+/BRUTO'",
         actions: [
           {
             dynamoDBv2: {
@@ -49,6 +63,12 @@ export class IotCoreExampleStack extends cdk.Stack {
           },
         ],
         description: 'Processa mensagens MQTT e salva no DynamoDB com timestamp e TTL',
+        errorAction: {
+          cloudwatchLogs: {
+            logGroupName: iotErrorLogGroup.logGroupName,
+            roleArn: iotRole.roleArn,
+          },
+        },
       },
     });
 
@@ -101,6 +121,11 @@ export class IotCoreExampleStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ApiEndpoint', {
       value: api.url,
       description: 'URL da API para consultar e confirmar mensagens',
+    });
+    
+    new cdk.CfnOutput(this, 'ErrorLogGroup', {
+      value: iotErrorLogGroup.logGroupName,
+      description: 'Grupo de logs para erros da regra IoT',
     });
   }
 }
