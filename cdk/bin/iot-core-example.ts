@@ -4,7 +4,8 @@ import * as cdk from 'aws-cdk-lib';
 import { IotCoreExampleStack } from '../lib/iot-core-example-stack';
 
 const app = new cdk.App();
-new IotCoreExampleStack(app, 'IotCoreExampleStack', {
+
+const stack = new IotCoreExampleStack(app, 'IotCoreExampleStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -19,3 +20,4 @@ new IotCoreExampleStack(app, 'IotCoreExampleStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+cdk.Tags.of(stack).add('Cliente', 'CASAN');
