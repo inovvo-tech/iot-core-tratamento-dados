@@ -11,6 +11,7 @@ import * as path from 'path';
 export class IotCoreExampleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+    cdk.Tags.of(this).add('Cliente', 'CASAN');
 
     // DynamoDB table para persistência das mensagens
     const messagesTable = new dynamodb.Table(this, 'MessagesTable', {
