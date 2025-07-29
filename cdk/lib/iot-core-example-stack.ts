@@ -52,7 +52,7 @@ export class IotCoreExampleStack extends cdk.Stack {
     const topicRule = new iot.CfnTopicRule(this, 'ProcessMqttMessages', {
       ruleName: 'process_mqtt_messages',
       topicRulePayload: {
-        sql: "SELECT *, timestamp() as timestamp, topic() as topic, traceid() as id, timestamp() + 2592000 as expirationTime, 'pending' as status FROM 'mho/keeper/v1/+/SAA/EFM01/BRUTO/telemetry'",
+        sql: "SELECT *, timestamp() as timestamp, topic() as topic, traceid() as id, timestamp() + 2592000 as expirationTime, 'pending' as status FROM '+/SAA/EFM01/BRUTO'",
         actions: [
           {
             dynamoDBv2: {
